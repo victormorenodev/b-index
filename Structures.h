@@ -8,6 +8,7 @@ using namespace std;
 enum class Instruction {
     INC,
     BUS,
+    FLH,
     INVALID
 };
 
