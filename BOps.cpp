@@ -1,9 +1,8 @@
 #include "BOps.h"
 #include "DirOps.h"
 #include <optional>
-#include "Structures.cpp"
 
-std::optional<Node> Node BOps::readBtreeLine(int line){
+std::optional<Node> BOps::readBtreeLine(int line){
     if(line != NULL && line>0){
     Node node = DirOps::readBTreeLine(line);
     return node;
