@@ -41,9 +41,6 @@ Node* DirOps::parseBTreeLine(string line){
 int DirOps::parseCSVLine(string line){
 }
 
-Operation DirOps::readInLine(int line){
-}
-
 Node* DirOps::readBTreeLine(int line){
 }
 

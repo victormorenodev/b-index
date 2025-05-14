@@ -2,6 +2,7 @@
 #include "DirOps.h"
 #include "Structures.h"
 #include <optional>
+using namespace std;
 
 std::optional<Node*> BOps::readBtreeLine(int line){
     if(line>0){
@@ -19,7 +20,25 @@ void BOps::splitNode(int line){
 }
 
 int BOps::countKey(int line, int key){
+    Node* node = DirOps::readBTreeLine(line);
+    LeafNode* leaf = dynamic_cast<LeafNode*>(node);
+    int count = 0;
+    const vector<int>* keys = &leaf->getKeys();
     
+    int i = 0;
+    while((*keys)[i] == -1 || (*keys)[i] == key){
+        if (key == (*keys)[i]){count++;}
+        i++;
+        if(i>(keys->size()-1)){
+            i = 0;
+            if (leaf->getNeighbor() > 0){
+            node = DirOps::readBTreeLine(leaf->getNeighbor());
+            leaf = dynamic_cast<LeafNode*>(node);
+            keys = &leaf->getKeys();}
+            else{break;}
+        }
+    }
+    return count;
 }
 
 int BOps::posKey(int key){

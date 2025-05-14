@@ -40,51 +40,36 @@ class Node {
         int nPts;
     
     public:
-        Node(int line, int fatherLine, int nPts, NodeType type)
-            : line(line), fatherLine(fatherLine), nPts(nPts), type(type)
-        {
-            keys.resize(nPts-1);
-        }
+        Node(int line, int fatherLine, int nPts, NodeType type);
+        virtual ~Node();
     
-        virtual ~Node() = default;
-    
-        NodeType getType() const { return type; }
-        const vector<int>& getKeys() const { return keys; }
+        NodeType getType() const;
+        const std::vector<int>& getKeys() const;
         virtual bool isLeaf() const = 0;
     };
-
-class LeafNode : public Node {
+    
+    class LeafNode : public Node {
     private:
         std::vector<int> csvPos;
         int neighbor;
     
     public:
-        LeafNode(int line, int fatherLine, int nPts, int neighbor)
-            : Node(line, fatherLine, nPts - 1, NodeType::LEAF), neighbor(neighbor)
-        {
-            csvPos.resize(nPts - 1); // mesmo número de posições que chaves
-        }
+        LeafNode(int line, int fatherLine, int nPts, int neighbor);
     
-        bool isLeaf() const override { return true; }
-    
-        const vector<int>& getCsvPos() const { return csvPos; }
-        int getNeighbor() const { return neighbor; }
+        bool isLeaf() const override;
+        const std::vector<int>& getCsvPos() const;
+        int getNeighbor() const;
     };
-
-class InternalNode : public Node {
+    
+    class InternalNode : public Node {
     private:
         std::vector<int> children;
     
     public:
-        InternalNode(int line, int fatherLine, int nPts)
-            : Node(line, fatherLine, nPts - 1, NodeType::INTERNAL)
-        {
-            children.resize(nPts); // N ponteiros
-        }
+        InternalNode(int line, int fatherLine, int nPts);
     
-        bool isLeaf() const override { return false; }
-    
-        const vector<int>& getChildren() const { return children; }
+        bool isLeaf() const override;
+        const std::vector<int>& getChildren() const;
     };
 
 #endif

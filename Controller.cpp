@@ -11,7 +11,7 @@ void Controller::doINC(int x){
         int id = 0;
         int line = 0;
 
-        for (int i=0; i++; i<=1000){                    // percorre o csv
+        for (int i=0; i<=1000; i++){                    // percorre o csv
             id = DirOps::readCSVLine(i, x);             // recebe o id da linha se o registro tem ano == x
             if (id == -1){continue;}                    // pula pro próximo laço se o viho acessa do tem ao != de x
             line = BOps::posKey(x);                     // recebe a posição que o nó deve ser inserido a árvore
@@ -46,4 +46,5 @@ void Controller::doOperation(Operation operation){
 
 int Controller::bTreeHeight(){
     int h = BOps::calcHeight(); // calcula a altura da árvore
+    return h;
 }
