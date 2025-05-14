@@ -32,10 +32,10 @@ Operation DirOps::readInLine(int line) {
     return Operation(Instruction::INVALID, -1);
 }
 
-string DirOps::parseNode(Node node){
+string DirOps::parseNode(Node* node){
 }
 
-Node DirOps::parseBTreeLine(string line){
+Node* DirOps::parseBTreeLine(string line){
 }
 
 int DirOps::parseCSVLine(string line){
@@ -44,13 +44,13 @@ int DirOps::parseCSVLine(string line){
 Operation DirOps::readInLine(int line){
 }
 
-Node DirOps::readBTreeLine(int line){
+Node* DirOps::readBTreeLine(int line){
 }
 
 void DirOps::deleteBTreeLine(int line){
 }
 
-void DirOps::writeBTreeLine(Node node){
+void DirOps::writeBTreeLine(Node* node){
 }
 
 void DirOps::writeOutLine(string line){
