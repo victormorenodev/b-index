@@ -10,7 +10,7 @@ using namespace std;
 
 class BOps {
     private:
-        static Node readBtreeLine(int line); // ler uma linha da árvore e retorna um node;
+        static std::optional<Node> readBtreeLine(int line); // ler uma linha da árvore e retorna um node;
         static void writeBtreeLine(Node node); // escreve um node na árvore;
         static void splitNode(int line); // splita o nó da linha informada
         static int countKey(int line); // a partir de uma folha ele conta quantas vezes uma chave se repete na árvore

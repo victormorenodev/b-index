@@ -31,3 +31,27 @@ Operation DirOps::readInLine(int line) {
     cerr << "Formato de linha inválido" << endl;
     return Operation(Instruction::INVALID, -1);
 }
+
+string DirOps::parseNode(Node node){
+}
+
+Node DirOps::parseBTreeLine(string line){
+}
+
+int DirOps::parseCSVLine(string line){
+}
+
+Operation DirOps::readInLine(int line){
+}
+
+Node DirOps::readBTreeLine(int line){
+}
+
+void DirOps::deleteBTreeLine(int line){
+}
+
+void DirOps::writeBTreeLine(Node node){
+}
+
+void DirOps::writeOutLine(string line){
+}
