@@ -11,8 +11,14 @@ using namespace std;
 class DirOps {
     private:
         static Instruction parseInstruction(string i);
+        static string parseNode(Node node); // linha --> node
+        static Node parseBTreeLine(string line); // node --> linha
     public:
         static Operation readInLine(int line);
+        static Node readBTreeLine(int line);
+        static void deleteBTreeLine(int line);
+        static void writeBTreeLine(Node node);
+        static void writeOutLine(string line);
 };
 
 #endif
