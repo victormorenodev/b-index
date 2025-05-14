@@ -25,27 +25,66 @@ class Operation {
         int getX() const;
     };
 
-class Node {
-
-    enum Type {
-        INTERNAL, 
+    enum class NodeType {
+        INTERNAL,
         LEAF
     };
 
-    private:
+    
+class Node {
+    protected:
         int line;
-        int nPts;
-        Type type;
         int fatherLine;
-        vector<int> keys;
-        vector<int> csvPos;
-        vector<int> pts;
-        int neighbor; // vizinho direito dos nós folha, esse nome é meio merda mas é meio q isso msm
-
+        std::vector<int> keys;
+        NodeType type;
+        int nPts;
+    
     public:
-        // respectivamente: linha na árvore, número máximo de ponteiros, tipo do nó, linha do pai na árvore, vetor de chaves,
-        // posição das chaves no csv e vetor de ponteiros
-        Node(int line, int nPts, Type type, int fatherLine, int firstKey, vector<int> keys, vector<int> csvPos, vector<int> pts, int neighbor);
-};
+        Node(int line, int fatherLine, int nPts, NodeType type)
+            : line(line), fatherLine(fatherLine), nPts(nPts), type(type)
+        {
+            keys.resize(nPts-1);
+        }
+    
+        virtual ~Node() = default;
+    
+        NodeType getType() const { return type; }
+        const vector<int>& getKeys() const { return keys; }
+        virtual bool isLeaf() const = 0;
+    };
+
+class LeafNode : public Node {
+    private:
+        std::vector<int> csvPos;
+        int neighbor;
+    
+    public:
+        LeafNode(int line, int fatherLine, int nPts, int neighbor)
+            : Node(line, fatherLine, nPts - 1, NodeType::LEAF), neighbor(neighbor)
+        {
+            csvPos.resize(nPts - 1); // mesmo número de posições que chaves
+        }
+    
+        bool isLeaf() const override { return true; }
+    
+        const vector<int>& getCsvPos() const { return csvPos; }
+        int getNeighbor() const { return neighbor; }
+    };
+
+class InternalNode : public Node {
+    private:
+        std::vector<int> children;
+    
+    public:
+        InternalNode(int line, int fatherLine, int nPts)
+            : Node(line, fatherLine, nPts - 1, NodeType::INTERNAL)
+        {
+            children.resize(nPts); // N ponteiros
+        }
+    
+        bool isLeaf() const override { return false; }
+    
+        const vector<int>& getChildren() const { return children; }
+    };
 
 #endif
