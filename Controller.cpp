@@ -3,11 +3,11 @@
 #include "BOps.h"
 
 void Controller::doFLH(int x){
-    if(x != NULL && x>0){BOps::setFLH(x);}
+    if(x>0){BOps::setFLH(x);}
 }
 
 void Controller::doINC(int x){
-    if(x != NULL && x>0){
+    if(x>0){
         int id = 0;
         int line = 0;
 
@@ -21,7 +21,7 @@ void Controller::doINC(int x){
 }
 
 void Controller::doBUS(int x){
-    if(x != NULL && x>0){BOps::searchKey(x);}
+    if(x>0){BOps::searchKey(x);}
 }
 
 void Controller::doOperation(Operation operation){
