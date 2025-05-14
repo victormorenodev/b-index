@@ -21,13 +21,17 @@ Node::Node(int line, int fatherLine, int nPts, NodeType type)
     keys.resize(nPts - 1);
 }
 
+int Node:: getLine() {
+    return line;
+}
+
 Node::~Node() = default;
 
 NodeType Node::getType() const {
     return type;
 }
 
-const std::vector<int>& Node::getKeys() const {
+std::vector<int>& Node::getKeys() {
     return keys;
 }
 
@@ -43,11 +47,11 @@ bool LeafNode::isLeaf() const {
     return true;
 }
 
-const std::vector<int>& LeafNode::getCsvPos() const {
+std::vector<int>& LeafNode::getCsvPos(){
     return csvPos;
 }
 
-int LeafNode::getNeighbor() const {
+int LeafNode::getNeighbor() {
     return neighbor;
 }
 
@@ -63,6 +67,6 @@ bool InternalNode::isLeaf() const {
     return false;
 }
 
-const std::vector<int>& InternalNode::getChildren() const {
+std::vector<int>& InternalNode::getChildren(){
     return children;
 }

@@ -44,7 +44,7 @@ class Node {
         virtual ~Node();
     
         NodeType getType() const;
-        const std::vector<int>& getKeys() const;
+        std::vector<int>& getKeys();
         virtual bool isLeaf() const = 0;
     };
     
@@ -57,8 +57,8 @@ class Node {
         LeafNode(int line, int fatherLine, int nPts, int neighbor);
     
         bool isLeaf() const override;
-        const std::vector<int>& getCsvPos() const;
-        int getNeighbor() const;
+        std::vector<int>& getCsvPos();
+        int getNeighbor();
     };
     
     class InternalNode : public Node {
@@ -69,7 +69,7 @@ class Node {
         InternalNode(int line, int fatherLine, int nPts);
     
         bool isLeaf() const override;
-        const std::vector<int>& getChildren() const;
+        std::vector<int>& getChildren();
     };
 
 #endif

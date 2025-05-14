@@ -17,6 +17,8 @@ void BOps::writeBtreeLine(Node* node){
 }
 
 void BOps::splitNode(int line){
+    //
+    return;
 }
 
 int BOps::countKey(int line, int key){
@@ -41,10 +43,50 @@ int BOps::countKey(int line, int key){
     return count;
 }
 
-int BOps::posKey(int key){
+int BOps::posKey(int key) {
+    Node* node = DirOps::readBTreeLine(1);
+
+    // Enquanto não for folha, desce na árvore
+    while (!node->isLeaf()) {
+        InternalNode* internal = dynamic_cast<InternalNode*>(node);
+        vector<int>& keys = internal->getKeys();
+        vector<int>& children = internal->getChildren();
+
+        int i = 0;
+        for (; i < keys.size(); i++) {
+            if (key < keys[i]) {
+                break;  // Encontrei o filho correto
+            }
+        }
+
+        // Desce para o filho escolhido
+        node = DirOps::readBTreeLine(children[i]);
+    }
+
+    // Quando chegar na folha, retorna a linha dela
+    return node->getLine();
 }
 
-void BOps::insertKey(int key, int id, int line){
+void BOps::insertKey(int key, int id, int line) {
+    Node* node = DirOps::readBTreeLine(line);
+    LeafNode* leaf = dynamic_cast<LeafNode*>(node);
+    vector<int>& keys = leaf->getKeys();
+    vector<int>& csvpos = leaf->getCsvPos();
+
+    if (keys[keys.size() - 1] != -1) {
+        splitNode(line);
+        return;  // encerra a função aqui
+    }
+
+    int swap_key = key;
+    int swap_pos = id;
+
+    for (int i = 0; i < keys.size(); i++) {
+        if (keys[i] == -1 || keys[i] > swap_key) {
+            std::swap(keys[i], swap_key);
+            std::swap(csvpos[i], swap_pos);
+        }
+    }
 }
 
 int BOps::searchKey(int key){
@@ -54,5 +96,15 @@ int BOps::searchKey(int key){
 }
 
 int BOps::calcHeight(){
-    //desce na árvore e conta os loops, ou armazena o número de nós e calcula a altura com uma equação
+    Node* node = DirOps::readBTreeLine(1);
+    InternalNode* internal = dynamic_cast<InternalNode*>(node);
+    const vector<int>* children = &internal->getChildren();
+    int h = 0;
+    while (!internal->isLeaf()){
+        node = DirOps::readBTreeLine((*children)[0]);
+        internal = dynamic_cast<InternalNode*>(node);
+        children = &internal->getChildren();
+        h++;
+    }
+    return h;
 }
