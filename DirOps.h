@@ -13,7 +13,9 @@ class DirOps {
         static Instruction parseInstruction(string i);
         static string parseNode(Node node); // linha --> node
         static Node parseBTreeLine(string line); // node --> linha
+        static int parseCSVLine(string line); // 
     public:
+        static int readCSVLine(int line, int x); // retorna o id do vinho se x == ano
         static Operation readInLine(int line);
         static Node readBTreeLine(int line);
         static void deleteBTreeLine(int line);

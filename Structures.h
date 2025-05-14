@@ -40,11 +40,12 @@ class Node {
         vector<int> keys;
         vector<int> csvPos;
         vector<int> pts;
+        int neighbor; // vizinho direito dos nós folha, esse nome é meio merda mas é meio q isso msm
 
     public:
         // respectivamente: linha na árvore, número máximo de ponteiros, tipo do nó, linha do pai na árvore, vetor de chaves,
         // posição das chaves no csv e vetor de ponteiros
-        Node(int line, int nPts, Type type, int fatherLine, int firstKey, vector<int> keys, vector<int> csvPos, vector<int> pts);
+        Node(int line, int nPts, Type type, int fatherLine, int firstKey, vector<int> keys, vector<int> csvPos, vector<int> pts, int neighbor);
 };
 
 #endif
