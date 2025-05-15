@@ -11,7 +11,8 @@ using namespace std;
 
 class BOps {
     private:
-        static std::optional<Node*> readBtreeLine(int line); // ler uma linha da árvore e retorna um node;
+        int nPts;
+        static optional<Node*> readBtreeLine(int line); // ler uma linha da árvore e retorna um node;
         static void writeBtreeLine(Node* node); // escreve um node na árvore;
         static void splitNode(int line); // splita o nó da linha informada
         static int countKey(int line, int key); // a partir de uma folha ele conta quantas vezes uma chave se repete na árvore
@@ -21,6 +22,8 @@ class BOps {
         static int searchKey(int key); // retorna o número de chaves tal que chave == key
         static int calcHeight(); // calcula a altura da árvore
         static void setFLH(int flh); // setar o máximo de filhos por nó
+        void setNpts(int nPts);
+        int getNpts();
 };
 
 #endif

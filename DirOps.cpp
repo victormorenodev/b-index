@@ -48,13 +48,14 @@ Node* DirOps::parseBTreeLine(string treeLine, int nPts){
 
     if (type == NodeType::INTERNAL) {
         vector<int> children = parseIntList(attributes[4]);
-        return NULL;
+        return &InternalNode::InternalNode(line, fatherLine, nPts, keys, children);
     }
 
     else {
         vector<int> csvPos = parseIntList(attributes[4]);
         int neighbor = stoi(attributes[5]);
-        return NULL;
+        // LeafNode(int line, int fatherLine, int nPts, vector<int> keys, vector<int> csvPos, int neighbor);
+        return &LeafNode::LeafNode(line, fatherLine, nPts, );
     }
 
 }

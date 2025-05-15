@@ -4,12 +4,12 @@
 #include <optional>
 using namespace std;
 
-std::optional<Node*> BOps::readBtreeLine(int line){
+optional<Node*> BOps::readBtreeLine(int line){
     if(line>0){
     Node* node = DirOps::readBTreeLine(line); //definir se é leaf ou iternal detro do DirOps
     return node;
     }
-    return std::nullopt; // linha inválida
+    return nullopt; // linha inválida
 }
 
 void BOps::writeBtreeLine(Node* node){
@@ -83,8 +83,8 @@ void BOps::insertKey(int key, int id, int line) {
 
     for (int i = 0; i < keys.size(); i++) {
         if (keys[i] == -1 || keys[i] > swap_key) {
-            std::swap(keys[i], swap_key);
-            std::swap(csvpos[i], swap_pos);
+            swap(keys[i], swap_key);
+            swap(csvpos[i], swap_pos);
         }
     }
 }
@@ -107,4 +107,12 @@ int BOps::calcHeight(){
         h++;
     }
     return h;
+}
+
+void BOps::setNpts(int nPts) {
+    this->nPts = nPts;
+}
+
+int BOps::getNpts() {
+    return this->nPts;
 }

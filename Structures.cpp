@@ -38,7 +38,7 @@ std::vector<int>& Node::getKeys() {
 
 
 LeafNode::LeafNode(int line, int fatherLine, int nPts, int neighbor)
-    : Node(line, fatherLine, nPts - 1, NodeType::LEAF), neighbor(neighbor)
+    : Node(line, fatherLine, nPts, NodeType::LEAF), neighbor(neighbor)
 {
     csvPos.resize(nPts - 1);
 }
@@ -58,7 +58,7 @@ int LeafNode::getNeighbor() {
 
 
 InternalNode::InternalNode(int line, int fatherLine, int nPts)
-    : Node(line, fatherLine, nPts - 1, NodeType::INTERNAL)
+    : Node(line, fatherLine, nPts, NodeType::INTERNAL)
 {
     children.resize(nPts);
 }
