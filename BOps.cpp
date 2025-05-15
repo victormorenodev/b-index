@@ -108,11 +108,3 @@ int BOps::calcHeight(int nPts){
     }
     return h;
 }
-
-void BOps::setNpts(int nPts) {
-    this->nPts = nPts;
-}
-
-int BOps::getNpts() {
-    return this->nPts;
-}

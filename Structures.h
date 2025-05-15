@@ -35,42 +35,43 @@ class Node {
     protected:
         int line;
         int fatherLine;
-        vector<int> keys;
+        std::vector<int> keys;
         NodeType type;
         int nPts;
     
     public:
         Node(int line, int fatherLine, int nPts, NodeType type);
         virtual ~Node();
-    
+        int getLine();
         NodeType getType() const;
-        vector<int>& getKeys();
-        int Node:: getLine();
+        std::vector<int>& getKeys();
         virtual bool isLeaf() const = 0;
+        int getFatherLine();
     };
     
     class LeafNode : public Node {
     private:
-        vector<int> csvPos;
+        std::vector<int> csvPos;
         int neighbor;
     
     public:
         LeafNode(int line, int fatherLine, int nPts, int neighbor);
-        LeafNode(int line, int fatherLine, int nPts, vector<int> keys, vector<int> csvPos, int neighbor);
+    
         bool isLeaf() const override;
-        vector<int>& getCsvPos();
+        std::vector<int>& getCsvPos();
         int getNeighbor();
+        void setNeighbor(int new_neighbor);
     };
     
     class InternalNode : public Node {
     private:
-        vector<int> children;
+        std::vector<int> children;
     
     public:
         InternalNode(int line, int fatherLine, int nPts);
-        InternalNode(int line, int fatherLine, int nPts, vector<int> keys, vector<int> children);
+    
         bool isLeaf() const override;
-        vector<int>& getChildren();
+        std::vector<int>& getChildren();
     };
 
 #endif
