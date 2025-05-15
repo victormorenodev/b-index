@@ -35,7 +35,7 @@ class Node {
     protected:
         int line;
         int fatherLine;
-        std::vector<int> keys;
+        vector<int> keys;
         NodeType type;
         int nPts;
     
@@ -55,7 +55,7 @@ class Node {
 
 class LeafNode : public Node {
     private:
-        std::vector<int> csvPos;
+        vector<int> csvPos;
         int neighbor;
     
     public:
@@ -73,7 +73,7 @@ class LeafNode : public Node {
 
 class InternalNode : public Node {
     private:
-        std::vector<int> children;
+        vector<int> children;
     
     public:
         InternalNode(int line, int fatherLine, int nPts)
