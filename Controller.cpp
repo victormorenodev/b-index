@@ -2,10 +2,6 @@
 #include "DirOps.h"
 #include "BOps.h"
 
-Controller::Controller(int nPts) {
-    this->nPts = nPts;
-}
-
 int Controller::getNpts() {
     return nPts;
 }
@@ -14,8 +10,10 @@ void Controller::setNpts(int nPts) {
     this->nPts = nPts;
 }
 
-void Controller::doFLH(int x){
-    if(x>0){setNpts(x);}
+void Controller::doFLH(){
+    setNpts(DirOps::readInLine(1).getX());
+    DirOps::writeOutLine("FLH/"+to_string(getNpts()));
+    //cout << DirOps::readInLine(1).getX();
 }
 
 void Controller::doINC(int x){
@@ -23,17 +21,22 @@ void Controller::doINC(int x){
         int id = 0;
         int line = 0;
 
-        for (int i=0; i<=1000; i++){                    // percorre o csv
+        for (int i=1; i<=1000; i++){                    // percorre o csv
             id = DirOps::readCSVLine(i, x);             // recebe o id da linha se o registro tem ano == x
             if (id == -1){continue;}                    // pula pro próximo laço se o viho acessa do tem ao != de x
             line = BOps::posKey(x, getNpts());                     // recebe a posição que o nó deve ser inserido a árvore
             BOps::insertKey(x, id, line, getNpts());               // insere have no nó da liha line(nó da árvore)
         }
     }
+    DirOps::writeOutLine("INC:"+to_string(x)+"/"+to_string(BOps::searchKey(x, getNpts())));
 }
 
 void Controller::doBUS(int x){
-    if(x>0){BOps::searchKey(x, getNpts());}
+    int found = -1;
+    if(x>0){
+        found = BOps::searchKey(x, getNpts());
+    }
+    DirOps::writeOutLine("BUS:"+to_string(x)+"/"+to_string(found));
 }
 
 void Controller::doOperation(Operation operation){
@@ -48,7 +51,7 @@ void Controller::doOperation(Operation operation){
             doBUS(x);
             break;
         case Instruction::FLH:
-            doFLH(x);
+            doFLH();
             break;
         default:
             std::cerr << "Instrução inválida recebida.\n";
@@ -60,3 +63,9 @@ int Controller::bTreeHeight(){
     int h = BOps::calcHeight(getNpts()); // calcula a altura da árvore
     return h;
 }
+
+Operation Controller::nextLine(int i) {
+    return DirOps::readInLine(i);
+}
+
+Controller::Controller(int nPts) : nPts(nPts) {};

@@ -11,7 +11,7 @@ using namespace std;
 class Controller {
     private:
         int nPts;
-        void doFLH(int x); // passa o número máximo de filhos de cada nó para a bOps
+        void doFLH(); // passa o número máximo de filhos de cada nó para a bOps
         void doINC(int x); // insere um nó a árvore usando a bOps, passando um objeto de forma - (id(csv))
         void doBUS(int x); // recebe um chave de busca x, e descobre quantas chaves iguais existem na árvore
  
@@ -21,6 +21,7 @@ class Controller {
         Controller(int nPts);
         int getNpts();
         void setNpts(int nPts);
+        static Operation nextLine(int i);
 };
 
 #endif

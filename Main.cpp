@@ -1,9 +1,18 @@
-#include "DirOps.h"
+#include "Controller.h"
+#include "Structures.h"
 
 using namespace std;
 
 int main() {
-    Operation test = DirOps::readInLine(0);
-    cout << test.getX() << endl;
+    Controller* controller = new Controller(-1);
+    //Operation* operation = new Operation(Instruction::FLH, -1);
+    //controller->doOperation(*(operation));
+    controller->doOperation(controller->nextLine(1));
+    controller->doOperation(controller->nextLine(2));
+    int i = 0;
+    /*do {
+        i++;
+        controller->doOperation(controller->nextLine(i));
+    } while(controller->nextLine(i+1).getInstruction() != Instruction::INVALID);*/
     return 0;   
 }

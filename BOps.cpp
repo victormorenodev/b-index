@@ -202,7 +202,9 @@ int BOps::countKey(int line, int key, int nPts){
 
 int BOps::posKey(int key, int nPts) {
     Node* node = DirOps::readBTreeLine(1, nPts);
-
+    if (node == NULL) {
+        return -1;
+    }
     // Enquanto não for folha, desce na árvore
     while (!node->isLeaf()) {
         InternalNode* internal = dynamic_cast<InternalNode*>(node);

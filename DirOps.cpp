@@ -46,13 +46,15 @@ Node* DirOps::parseBTreeLine(string treeLine, int nPts){
 
     if (type == NodeType::INTERNAL) {
         vector<int> children = parseIntList(attributes[4]);
-        return &InternalNode::InternalNode(line, fatherLine, nPts, keys, children);
+        InternalNode* internalNode = new InternalNode(line, fatherLine, nPts, keys, children);
+        return internalNode;
     }
 
     else {
         vector<int> csvPos = parseIntList(attributes[4]);
         int neighbor = stoi(attributes[5]);
-        return &LeafNode::LeafNode(line, fatherLine, nPts, keys, csvPos, neighbor);
+        LeafNode* leafNode = new LeafNode(line, fatherLine, nPts, keys, csvPos, neighbor);
+        return leafNode;
     }
 
 }
@@ -103,27 +105,48 @@ string DirOps::parseNode(Node* node){
     return result;
 }
 
-Operation DirOps::readInLine(int line) {
+Operation DirOps::readInLine(int line) { // 0 = INC, 1 = BUS, 2 = FLH
     ifstream in("in.txt");
     if (!in.is_open()) {
         cerr << "Erro ao abrir o arquivo in.txt" << endl;
         return Operation(Instruction::INVALID, -1);
     }
     string l;
-    int currentLine = 0;
-    while (getline(in, l) && currentLine != line) {
+    int currentLine = 1;
+    while (getline(in, l) && currentLine < line) {
         currentLine++;
     }
     if (currentLine != line) {
-        cerr << "Essa linha não existe no arquivo in.txt" << endl;
+        //cerr << "Essa linha não existe no arquivo in.txt" << endl;
         return Operation(Instruction::INVALID, -1);
     }
-    size_t colon = l.find(':');
-    if (colon != string::npos) {
-        return Operation(
-            parseInstruction(l.substr(0, colon)), 
-            stoi(l.substr(colon+1))
-        );
+    cout << l.substr(0);
+    if (l.substr(0, 1) == "I") {
+        size_t colon = l.find(':');
+        if (colon != string::npos) {
+            return Operation(
+                parseInstruction(l.substr(0, colon)), 
+                stoi(l.substr(colon+1))
+            );
+        }
+    } 
+    else if (l.substr(0, 1) == "B") {
+        size_t colon = l.find(':');
+        if (colon != string::npos) {
+            return Operation(
+                parseInstruction(l.substr(0, colon-1)), 
+                stoi(l.substr(colon+1))
+            );
+        }
+    }
+    else if (l.substr(0, 1) == "F"){
+        size_t colon = l.find('/');
+        if (colon != string::npos) {
+            return Operation(
+                parseInstruction(l.substr(0, colon)), 
+                stoi(l.substr(colon+1))
+            );
+        }
     }
     cerr << "Formato de linha inválido" << endl;
     in.close();
@@ -158,7 +181,7 @@ Node* DirOps::readBTreeLine(int line, int nPts){
         currentLine++;
     }
     if (currentLine != line) {
-        cerr << "Essa linha não existe no arquivo in.txt" << endl;
+        cerr << "Essa linha não existe no arquivo btree.txt" << endl;
         return NULL;
     }
     in.close();
@@ -237,19 +260,23 @@ int DirOps::readCSVLine(int line, int x) {
     ifstream in("vinhos.csv");
     if (!in.is_open()) {
         cerr << "Erro ao abrir o arquivo vinho.csv" << endl;
-        return NULL;
+        return -1;
     }
     string l;
     getline(in, l);
     int currentLine = 1;
-    while (getline(in, l) && currentLine-1 != line) {
+    while (getline(in, l) && currentLine != line) {
         currentLine++;
     }
     if (currentLine != line) {
-        cerr << "Essa linha não existe no arquivo vinhos.csv" << endl;
-        return NULL;
+        cerr << "Essa linha não existe no arquivo vinhos.csv" << endl << line << endl;
+        return -1;
     }
     in.close();
     if (parseCSVLine(l) != x) { return -1; };
     return parseCSVLine(l);
+}
+
+void nextLine(int i) {
+    DirOps::readInLine(i);
 }

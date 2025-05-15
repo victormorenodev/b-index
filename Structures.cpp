@@ -13,8 +13,6 @@ int Operation::getX() const {
     return x;
 }
 
-
-
 Node::Node(int line, int fatherLine, int nPts, NodeType type)
     : line(line), fatherLine(fatherLine), nPts(nPts), type(type)
 {
@@ -35,12 +33,12 @@ NodeType Node::getType() const {
     return type;
 }
 
-std::vector<int>& Node::getKeys() {
+vector<int>& Node::getKeys() {
     return keys;
 }
 
 void Node::setFatherLine(int newFather) {
-    fatherLine = newFather;
+    this->fatherLine = newFather;
 }
 
 
@@ -49,6 +47,11 @@ LeafNode::LeafNode(int line, int fatherLine, int nPts, int neighbor)
     : Node(line, fatherLine, nPts, NodeType::LEAF), neighbor(neighbor)
 {
     csvPos.resize(nPts - 1);
+}
+
+LeafNode::LeafNode(int line, int fatherLine, int nPts, vector<int> keys, vector<int> csvPos, int neighbor)
+    : Node(line, fatherLine, nPts, NodeType::LEAF), csvPos(csvPos), neighbor(neighbor) {
+    this->keys = keys;
 }
 
 bool LeafNode::isLeaf() const {
@@ -69,11 +72,15 @@ void LeafNode::setNeighbor(int new_neighbor) {
 }
 
 
-
 InternalNode::InternalNode(int line, int fatherLine, int nPts)
     : Node(line, fatherLine, nPts, NodeType::INTERNAL)
 {
     children.resize(nPts);
+}
+
+InternalNode::InternalNode(int line, int fatherLine, int nPts, vector<int> keys, vector<int> children)
+    : Node(line, fatherLine, nPts, NodeType::INTERNAL), children(children) {
+    this->keys = keys;
 }
 
 bool InternalNode::isLeaf() const {
