@@ -140,7 +140,8 @@ void DirOps::editBTreeLine(int line, Node* newNode){
     rename("temp.txt", "btree.txt");
 }
 
-void DirOps::writeBTreeLine(Node* node){
+int DirOps::writeBTreeLine(Node* node){
+    return 0;
 }
 
 void DirOps::writeOutLine(string line){

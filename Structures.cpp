@@ -39,6 +39,10 @@ std::vector<int>& Node::getKeys() {
     return keys;
 }
 
+void Node::setFatherLine(int newFather) {
+    fatherLine = newFather;
+}
+
 
 
 LeafNode::LeafNode(int line, int fatherLine, int nPts, int neighbor)
@@ -57,6 +61,11 @@ std::vector<int>& LeafNode::getCsvPos(){
 
 int LeafNode::getNeighbor() {
     return neighbor;
+}
+
+void LeafNode::setNeighbor(int new_neighbor) {
+    neighbor = new_neighbor;
+    return;
 }
 
 
