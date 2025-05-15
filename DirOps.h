@@ -17,7 +17,7 @@ class DirOps {
     public:
         static int readCSVLine(int line, int x); // retorna o id do vinho se x == ano, se n retorna -1
         static Operation readInLine(int line);
-        static Node* readBTreeLine(int line);
+        static Node* readBTreeLine(int line, int nPts);
         static void editBTreeLine(int line, Node* newNode);
         static void writeBTreeLine(Node* node);
         static void writeOutLine(string line);

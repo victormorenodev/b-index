@@ -4,9 +4,9 @@
 #include <optional>
 using namespace std;
 
-optional<Node*> BOps::readBtreeLine(int line){
+optional<Node*> BOps::readBtreeLine(int line, int nPts){
     if(line>0){
-    Node* node = DirOps::readBTreeLine(line); //definir se é leaf ou iternal detro do DirOps
+    Node* node = DirOps::readBTreeLine(line, nPts); //definir se é leaf ou iternal detro do DirOps
     return node;
     }
     return nullopt; // linha inválida
@@ -21,8 +21,8 @@ void BOps::splitNode(int line){
     return;
 }
 
-int BOps::countKey(int line, int key){
-    Node* node = DirOps::readBTreeLine(line);
+int BOps::countKey(int line, int key, int nPts){
+    Node* node = DirOps::readBTreeLine(line, nPts);
     LeafNode* leaf = dynamic_cast<LeafNode*>(node);
     int count = 0;
     const vector<int>* keys = &leaf->getKeys();
@@ -34,7 +34,7 @@ int BOps::countKey(int line, int key){
         if(i>(keys->size()-1)){
             i = 0;
             if (leaf->getNeighbor() > 0){
-            node = DirOps::readBTreeLine(leaf->getNeighbor());
+            node = DirOps::readBTreeLine(leaf->getNeighbor(), nPts);
             leaf = dynamic_cast<LeafNode*>(node);
             keys = &leaf->getKeys();}
             else{break;}
@@ -43,8 +43,8 @@ int BOps::countKey(int line, int key){
     return count;
 }
 
-int BOps::posKey(int key) {
-    Node* node = DirOps::readBTreeLine(1);
+int BOps::posKey(int key, int nPts) {
+    Node* node = DirOps::readBTreeLine(1, nPts);
 
     // Enquanto não for folha, desce na árvore
     while (!node->isLeaf()) {
@@ -60,15 +60,15 @@ int BOps::posKey(int key) {
         }
 
         // Desce para o filho escolhido
-        node = DirOps::readBTreeLine(children[i]);
+        node = DirOps::readBTreeLine(children[i], nPts);
     }
 
     // Quando chegar na folha, retorna a linha dela
     return node->getLine();
 }
 
-void BOps::insertKey(int key, int id, int line) {
-    Node* node = DirOps::readBTreeLine(line);
+void BOps::insertKey(int key, int id, int line, int nPts) {
+    Node* node = DirOps::readBTreeLine(line, nPts);
     LeafNode* leaf = dynamic_cast<LeafNode*>(node);
     vector<int>& keys = leaf->getKeys();
     vector<int>& csvpos = leaf->getCsvPos();
@@ -89,19 +89,19 @@ void BOps::insertKey(int key, int id, int line) {
     }
 }
 
-int BOps::searchKey(int key){
-    int line = posKey(key);
-    int count = countKey(line, key);
+int BOps::searchKey(int key, int nPts){
+    int line = posKey(key, nPts);
+    int count = countKey(line, key, nPts);
     return count;
 }
 
-int BOps::calcHeight(){
-    Node* node = DirOps::readBTreeLine(1);
+int BOps::calcHeight(int nPts){
+    Node* node = DirOps::readBTreeLine(1, nPts);
     InternalNode* internal = dynamic_cast<InternalNode*>(node);
     const vector<int>* children = &internal->getChildren();
     int h = 0;
     while (!internal->isLeaf()){
-        node = DirOps::readBTreeLine((*children)[0]);
+        node = DirOps::readBTreeLine((*children)[0], nPts);
         internal = dynamic_cast<InternalNode*>(node);
         children = &internal->getChildren();
         h++;

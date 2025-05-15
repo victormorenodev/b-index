@@ -25,8 +25,6 @@ vector<int> parseIntList(string str) {
     return result;
 }
 
-// InternalNode -> line:type:fatherLine:keys[]:children[] -> 2:INTERNAL:1:2001,2002:4,5
-// LeafNode -> line:type:fatherLine:keys[]:csvPos[]:neighbor -> 6:LEAF:4:2001,2002:8,12:7
 Node* DirOps::parseBTreeLine(string treeLine, int nPts){
     stringstream ss(treeLine);
     string part;
@@ -54,8 +52,7 @@ Node* DirOps::parseBTreeLine(string treeLine, int nPts){
     else {
         vector<int> csvPos = parseIntList(attributes[4]);
         int neighbor = stoi(attributes[5]);
-        // LeafNode(int line, int fatherLine, int nPts, vector<int> keys, vector<int> csvPos, int neighbor);
-        return &LeafNode::LeafNode(line, fatherLine, nPts, );
+        return &LeafNode::LeafNode(line, fatherLine, nPts, keys, csvPos, neighbor);
     }
 
 }
