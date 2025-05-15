@@ -57,6 +57,52 @@ Node* DirOps::parseBTreeLine(string treeLine, int nPts){
 
 }
 
+string DirOps::parseNode(Node* node){
+    int line = node->getLine();
+    int fatherLine = node->getFatherLine();
+    NodeType type = node->getType();
+    vector<int> keys = node->getKeys();
+
+    // InternalNode -> line:type:fatherLine:keys[]:children[] -> 2:INTERNAL:1:2001,2002:4,5
+    // LeafNode -> line:type:fatherLine:keys[]:csvPos[]:neighbor -> 6:LEAF:4:2001,2002:8,12:7
+    string result = "";
+    result += to_string(line) + 
+        ":" + 
+        string(type == NodeType::INTERNAL ? "INTERNAL" : "LEAF") +
+        ":" +
+        to_string(fatherLine) + ":";
+    for (int i = 0; i < keys.size(); i++) {
+        result += to_string(keys[i]);
+        if (i < keys.size()-1) {
+            result += ", ";
+        }
+    }
+    result += ":";
+    if (type == NodeType::INTERNAL) {
+        InternalNode* internalNode = dynamic_cast<InternalNode*>(node);
+        vector<int> children = internalNode->getChildren();
+        for (int i = 0; i < children.size(); i++) {
+            result += to_string(children[i]);
+            if (i < children.size()-1) {
+                result += ", ";
+            }
+        }
+    }
+    else {
+        LeafNode* leafNode = dynamic_cast<LeafNode*>(node);
+        vector<int> csvPos = leafNode->getCsvPos();
+        int neighbor = leafNode->getNeighbor();
+        for (int i = 0; i < csvPos.size(); i++) {
+            result += to_string(csvPos[i]);
+            if (i < csvPos.size()-1) {
+                result += ", ";
+            }
+        }
+        result += ":"+to_string(neighbor);
+    }
+    return result;
+}
+
 Operation DirOps::readInLine(int line) {
     ifstream in("in.txt");
     if (!in.is_open()) {
@@ -84,12 +130,20 @@ Operation DirOps::readInLine(int line) {
     return Operation(Instruction::INVALID, -1);
 }
 
-string DirOps::parseNode(Node* node){
-    return "";
-}
-
 int DirOps::parseCSVLine(string line){
-    return -1;
+    stringstream ss(line);
+    string part;
+    vector<string> attributes;
+
+    while (getline(ss, part, ',')) {
+        attributes.push_back(part);
+    }
+
+    if (attributes.size() != 4) {
+        cerr << "Formato inválido de entrada do CSV!" << endl;
+        return -1;
+    }
+    return stoi(attributes[2]);
 }
 
 Node* DirOps::readBTreeLine(int line, int nPts){
@@ -140,12 +194,62 @@ void DirOps::editBTreeLine(int line, Node* newNode){
     rename("temp.txt", "btree.txt");
 }
 
-void DirOps::writeBTreeLine(Node* node){
+int DirOps::writeBTreeLine(Node* node){
+    ifstream inFile("btree.txt");
+    int lineNumber = 1;
+    string line;
+    
+    if (inFile.is_open()) {
+        while (getline(inFile, line)) {
+            lineNumber++;
+        }
+        inFile.close();
+    }
+    
+    ofstream outFile("btree.txt", ios::app);
+    
+    if (!outFile.is_open()) {
+        cerr << "Não foi possível abrir o arquivo btree.txt para escrita." << endl;
+        return -1; 
+    }
+    
+    string nodeString = parseNode(node);
+    outFile << nodeString;
+    
+    outFile.close();
+    
+    return lineNumber;
 }
 
-void DirOps::writeOutLine(string line){
+void DirOps::writeOutLine(string line) {
+    ofstream outFile("out.txt", ios::app);
+    
+    if (outFile.is_open()) {
+        outFile << line << endl;
+        
+        outFile.close();
+    } else {
+        cerr << "Erro ao abrir ou gerar o arquivo out.txt" << endl;
+    }
 }
 
 int DirOps::readCSVLine(int line, int x) {
-    return -1;
+    ifstream in("vinhos.csv");
+    if (!in.is_open()) {
+        cerr << "Erro ao abrir o arquivo vinho.csv" << endl;
+        return NULL;
+    }
+    string l;
+    getline(in, l);
+    int currentLine = 1;
+    while (getline(in, l) && currentLine-1 != line) {
+        currentLine++;
+    }
+    if (currentLine != line) {
+        cerr << "Essa linha não existe no arquivo vinhos.csv" << endl;
+        return NULL;
+    }
+    in.close();
+    if (parseCSVLine(l) != x) { return -1; };
+    return parseCSVLine(l);
 }

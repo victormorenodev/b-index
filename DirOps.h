@@ -19,7 +19,7 @@ class DirOps {
         static Operation readInLine(int line);
         static Node* readBTreeLine(int line, int nPts);
         static void editBTreeLine(int line, Node* newNode);
-        static void writeBTreeLine(Node* node);
+        static int writeBTreeLine(Node* node); // retorna a linha que escreveu
         static void writeOutLine(string line);
 };
 

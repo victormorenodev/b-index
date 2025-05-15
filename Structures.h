@@ -42,11 +42,11 @@ class Node {
     public:
         Node(int line, int fatherLine, int nPts, NodeType type);
         virtual ~Node();
-    
         NodeType getType() const;
         vector<int>& getKeys();
         int Node:: getLine();
         virtual bool isLeaf() const = 0;
+        int getFatherLine();
     };
     
     class LeafNode : public Node {

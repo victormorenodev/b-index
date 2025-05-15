@@ -25,6 +25,10 @@ int Node:: getLine() {
     return line;
 }
 
+int Node:: getFatherLine() {
+    return fatherLine;
+}
+
 Node::~Node() = default;
 
 NodeType Node::getType() const {
