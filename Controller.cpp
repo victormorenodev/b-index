@@ -15,7 +15,7 @@ void Controller::setNpts(int nPts) {
 }
 
 void Controller::doFLH(int x){
-    if(x>0){BOps::setFLH(x);}
+    if(x>0){setNpts(x);}
 }
 
 void Controller::doINC(int x){
