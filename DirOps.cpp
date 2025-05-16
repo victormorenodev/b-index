@@ -76,7 +76,7 @@ string DirOps::parseNode(Node* node){
     for (int i = 0; i < keys.size(); i++) {
         result += to_string(keys[i]);
         if (i < keys.size()-1) {
-            result += ", ";
+            result += ",";
         }
     }
     result += ":";
@@ -86,7 +86,7 @@ string DirOps::parseNode(Node* node){
         for (int i = 0; i < children.size(); i++) {
             result += to_string(children[i]);
             if (i < children.size()-1) {
-                result += ", ";
+                result += ",";
             }
         }
     }
@@ -97,7 +97,7 @@ string DirOps::parseNode(Node* node){
         for (int i = 0; i < csvPos.size(); i++) {
             result += to_string(csvPos[i]);
             if (i < csvPos.size()-1) {
-                result += ", ";
+                result += ",";
             }
         }
         result += ":"+to_string(neighbor);
@@ -153,7 +153,7 @@ Operation DirOps::readInLine(int line) { // 0 = INC, 1 = BUS, 2 = FLH
     return Operation(Instruction::INVALID, -1);
 }
 
-int DirOps::parseCSVLine(string line){
+vector<int> DirOps::parseCSVLine(string line){
     stringstream ss(line);
     string part;
     vector<string> attributes;
@@ -164,9 +164,9 @@ int DirOps::parseCSVLine(string line){
 
     if (attributes.size() != 4) {
         cerr << "Formato inválido de entrada do CSV!" << endl;
-        return -1;
+        return {-1};
     }
-    return stoi(attributes[2]);
+    return {stoi(attributes[0]), stoi(attributes[2])};
 }
 
 Node* DirOps::readBTreeLine(int line, int nPts){
@@ -181,6 +181,7 @@ Node* DirOps::readBTreeLine(int line, int nPts){
         currentLine++;
     }
     if (currentLine != line) {
+        cout << "Line: " << to_string(line) << "Current line: " << to_string(currentLine);
         cerr << "Essa linha não existe no arquivo btree.txt" << endl;
         return NULL;
     }
@@ -188,11 +189,11 @@ Node* DirOps::readBTreeLine(int line, int nPts){
     return parseBTreeLine(l, nPts);
 }
 
-void DirOps::editBTreeLine(int line, Node* newNode){
+void DirOps::editBTreeLine(int line, Node* newNode) {
     ifstream inFile("btree.txt");
     ofstream outFile("temp.txt");
 
-    if (!inFile || !outFile) {
+    if (!inFile.is_open() || !outFile.is_open()) {
         cerr << "Erro ao abrir arquivos!" << endl;
         return;
     }
@@ -200,21 +201,27 @@ void DirOps::editBTreeLine(int line, Node* newNode){
     string bufferLine;
     int currentLine = 1;
 
-    while(getline(inFile, bufferLine)) {
+    while (getline(inFile, bufferLine)) {
+        if (currentLine != 1) { outFile << "\n"; };
         if (currentLine == line) {
-            outFile << parseNode(newNode) << "\n";
-            currentLine++;
-            continue;
+            outFile << parseNode(newNode); // sobrescreve a linha desejada
+        } else {
+            outFile << bufferLine; // mantém as outras linhas
         }
-        outFile << bufferLine << "\n";
         currentLine++;
     }
 
     inFile.close();
     outFile.close();
 
-    remove("btree.txt");
-    rename("temp.txt", "btree.txt");
+    // Substitui o arquivo original pelo modificado
+    if (remove("btree.txt") != 0) {
+        cerr << "Erro ao remover btree.txt" << endl;
+        return;
+    }
+    if (rename("temp.txt", "btree.txt") != 0) {
+        cerr << "Erro ao renomear temp.txt para btree.txt" << endl;
+    }
 }
 
 int DirOps::writeBTreeLine(Node* node){
@@ -240,7 +247,8 @@ int DirOps::writeBTreeLine(Node* node){
     outFile << nodeString;
     
     outFile.close();
-    
+    inFile.close();
+
     return lineNumber;
 }
 
@@ -269,12 +277,12 @@ int DirOps::readCSVLine(int line, int x) {
         currentLine++;
     }
     if (currentLine != line) {
-        cerr << "Essa linha não existe no arquivo vinhos.csv" << endl << line << endl;
+        cerr << "Essa linha não existe no arquivo vinhos.csv" << endl;
         return -1;
     }
     in.close();
-    if (parseCSVLine(l) != x) { return -1; };
-    return parseCSVLine(l);
+    if (parseCSVLine(l)[1] != x) { return -1; };
+    return parseCSVLine(l)[0];
 }
 
 void nextLine(int i) {

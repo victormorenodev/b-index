@@ -1,5 +1,6 @@
 #include "Controller.h"
 #include "Structures.h"
+#include "DirOps.h"
 
 using namespace std;
 

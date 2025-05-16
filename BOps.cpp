@@ -6,9 +6,9 @@
 using namespace std;
 
 void BOps::rooteNode(int key, int id, int nPts){
-    LeafNode* root = new LeafNode(-1, -1, nPts, -1);
+    // int line, int fatherLine, int nPts, vector<int> keys, vector<int> csvPos, int neighbor
+    LeafNode* root = new LeafNode(1, -1, nPts, {key}, {id}, -1);
     int line = DirOps::writeBTreeLine(root);
-    
 }
 
 optional<Node*> BOps::readBtreeLine(int line, int nPts){
@@ -237,8 +237,8 @@ void BOps::insertKey(int key, int id, int line, int nPts) {
     LeafNode* leaf = dynamic_cast<LeafNode*>(node);
     vector<int>& keys = leaf->getKeys();
     vector<int>& csvpos = leaf->getCsvPos();
-
-    if (keys[keys.size() - 1] != -1) {
+    if (keys.size() == (nPts-1)) {
+        cout << to_string(keys[keys.size() - 1]) << "FAZ O SPLIT!";
         splitNode(line, nPts, key, id);
         return;  // encerra a função aqui
     }
@@ -252,6 +252,8 @@ void BOps::insertKey(int key, int id, int line, int nPts) {
             swap(csvpos[i], swap_pos);
         }
     }
+
+    DirOps::editBTreeLine(line, leaf);
 }
 
 int BOps::searchKey(int key, int nPts){

@@ -22,11 +22,18 @@ void Controller::doINC(int x){
         int line = 0;
 
         for (int i=1; i<=1000; i++){                    // percorre o csv
+            cout << " LINHA: " << to_string(i) << " , ";
             id = DirOps::readCSVLine(i, x);             // recebe o id da linha se o registro tem ano == x
-            if (id == -1){continue;}                    // pula pro próximo laço se o viho acessa do tem ao != de x
+            cout << " ID: " << to_string(id) << endl;
+            if (id == -1){continue;}                  // pula pro próximo laço se o viho acessa do tem ao != de x
             line = BOps::posKey(x, getNpts());                     // recebe a posição que o nó deve ser inserido a árvore
-            if(line == -1){BOps::rooteNode(x, id,getNpts());}
+            if(line == -1){
+                BOps::rooteNode(x, id , getNpts());
+                continue;
+            }
+            cout << "Entra e o line é esse = " << to_string(line) << endl;
             BOps::insertKey(x, id, line, getNpts());               // insere have no nó da liha line(nó da árvore)
+            cout << "Sai" << endl;
         }
     }
     DirOps::writeOutLine("INC:"+to_string(x)+"/"+to_string(BOps::searchKey(x, getNpts())));
