@@ -10,6 +10,7 @@ using namespace std;
 
 class Controller {
     private:
+        int root; 
         int nPts;
         void doFLH(); // passa o número máximo de filhos de cada nó para a bOps
         void doINC(int x); // insere um nó a árvore usando a bOps, passando um objeto de forma - (id(csv))
@@ -22,6 +23,8 @@ class Controller {
         int getNpts();
         void setNpts(int nPts);
         static Operation nextLine(int i);
+        void setRoot(int root);
+        int getRoot();
 };
 
 #endif

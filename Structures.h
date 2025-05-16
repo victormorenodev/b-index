@@ -48,6 +48,7 @@ class Node {
         virtual bool isLeaf() const = 0;
         int getFatherLine();
         void setFatherLine(int newFather);
+        void setLine(int line);
     };
     
     class LeafNode : public Node {

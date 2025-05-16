@@ -23,6 +23,7 @@ void BOps::writeBtreeLine(Node* node){
     DirOps::writeBTreeLine(node); // tratar no DirOps os casos de ser leaf ou iternal
 }
 
+
 void BOps::splitNode(int line, int nPts, int key, int id){
     Node* node = DirOps::readBTreeLine(line, nPts);
     if(node->isLeaf()){BOps::splitLeaf(line,nPts,key,id);}
@@ -53,8 +54,6 @@ void BOps::splitLeaf(int line, int nPts, int key, int id){
     int medianKey = temp[medianIndex].first;
     int medianId = temp[medianIndex].second;
 
-    // Inserir no pai
-    insertKey(medianKey, -1, leaf->getFatherLine(), nPts);
 
     // Criar novo nó
     LeafNode* newleaf = new LeafNode(-1, leaf->getFatherLine(), nPts, neighbor);
@@ -75,6 +74,15 @@ void BOps::splitLeaf(int line, int nPts, int key, int id){
         newleaf->getCsvPos().push_back(temp[i].second);
     }
 
+    // Inserir no pai
+    if(leaf->getFatherLine() != -1){
+        insertKey(medianKey, -1, leaf->getFatherLine(), nPts);}
+        else{
+            InternalNode* newroot = new InternalNode(-1, -1, nPts, {medianKey}, {line,neighbor});
+            int newline = DirOps::writeBTreeLine(newroot);
+            newroot->setLine(newline);
+            DirOps::editBTreeLine(newline, newroot);
+        }
 
     int newline = DirOps::writeBTreeLine(newleaf);
     leaf->setNeighbor(newline);
@@ -182,8 +190,6 @@ void BOps::splitInternal(int line, int nPts, int key, int id) {
 }
 
 
-
-
 int BOps::countKey(int line, int key, int nPts){
     Node* node = DirOps::readBTreeLine(line, nPts);
     LeafNode* leaf = dynamic_cast<LeafNode*>(node);
@@ -206,8 +212,8 @@ int BOps::countKey(int line, int key, int nPts){
     return count;
 }
 
-int BOps::posKey(int key, int nPts) {
-    Node* node = DirOps::readBTreeLine(1, nPts);
+int BOps::posKey(int key, int nPts, int root) {
+    Node* node = DirOps::readBTreeLine(root, nPts);
     if (node == NULL) {
         return -1;
     }
@@ -235,23 +241,26 @@ int BOps::posKey(int key, int nPts) {
 void BOps::insertKey(int key, int id, int line, int nPts) {
     Node* node = DirOps::readBTreeLine(line, nPts);
     LeafNode* leaf = dynamic_cast<LeafNode*>(node);
+
     vector<int>& keys = leaf->getKeys();
     vector<int>& csvpos = leaf->getCsvPos();
+    cout << endl << to_string(nPts) << endl;
     if (keys.size() == (nPts-1)) {
-        cout << to_string(keys[keys.size() - 1]) << "FAZ O SPLIT!";
+        cout << to_string(keys[keys.size() - 1]) << "FAZ O SPLIT!" << endl;
         splitNode(line, nPts, key, id);
         return;  // encerra a função aqui
+    }
+
+    int pos = 0;
+    while (pos < keys.size() && keys[pos] < key) {
+        pos++;
     }
 
     int swap_key = key;
     int swap_pos = id;
 
-    for (int i = 0; i < keys.size(); i++) {
-        if (keys[i] == -1 || keys[i] > swap_key) {
-            swap(keys[i], swap_key);
-            swap(csvpos[i], swap_pos);
-        }
-    }
+    keys.insert(keys.begin() + pos, key);
+    csvpos.insert(csvpos.begin() + pos, id);
 
     DirOps::editBTreeLine(line, leaf);
 }

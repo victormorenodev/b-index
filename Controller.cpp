@@ -2,6 +2,16 @@
 #include "DirOps.h"
 #include "BOps.h"
 
+
+void Controller::setRoot(int root){
+    this->root = root;
+}
+
+int Controller::getRoot() {
+    return root;
+}
+
+    
 int Controller::getNpts() {
     return nPts;
 }
@@ -26,7 +36,7 @@ void Controller::doINC(int x){
             id = DirOps::readCSVLine(i, x);             // recebe o id da linha se o registro tem ano == x
             cout << " ID: " << to_string(id) << endl;
             if (id == -1){continue;}                  // pula pro próximo laço se o viho acessa do tem ao != de x
-            line = BOps::posKey(x, getNpts());                     // recebe a posição que o nó deve ser inserido a árvore
+            line = BOps::posKey(x, getNpts(), getRoot());                     // recebe a posição que o nó deve ser inserido a árvore
             if(line == -1){
                 BOps::rooteNode(x, id , getNpts());
                 continue;

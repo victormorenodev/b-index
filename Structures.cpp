@@ -40,7 +40,9 @@ vector<int>& Node::getKeys() {
 void Node::setFatherLine(int newFather) {
     this->fatherLine = newFather;
 }
-
+void Node::setLine(int line) {
+    this->line = line;
+}
 
 
 LeafNode::LeafNode(int line, int fatherLine, int nPts, int neighbor)
