@@ -25,6 +25,7 @@ void Controller::doINC(int x){
             id = DirOps::readCSVLine(i, x);             // recebe o id da linha se o registro tem ano == x
             if (id == -1){continue;}                    // pula pro próximo laço se o viho acessa do tem ao != de x
             line = BOps::posKey(x, getNpts());                     // recebe a posição que o nó deve ser inserido a árvore
+            if(line == -1){BOps::rooteNode(x, id,getNpts());}
             BOps::insertKey(x, id, line, getNpts());               // insere have no nó da liha line(nó da árvore)
         }
     }

@@ -23,6 +23,7 @@ class BOps {
         static int searchKey(int key, int nPts); // retorna o número de chaves tal que chave == key
         static int calcHeight(int nPts); // calcula a altura da árvore
         static void setFLH(int flh); // setar o máximo de filhos por nó
+        static void rooteNode(int key, int id, int nPts); // setar o nó raiz
 };
 
 #endif

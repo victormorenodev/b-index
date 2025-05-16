@@ -5,6 +5,12 @@
 #include <algorithm>
 using namespace std;
 
+void BOps::rooteNode(int key, int id, int nPts){
+    LeafNode* root = new LeafNode(-1, -1, nPts, -1);
+    int line = DirOps::writeBTreeLine(root);
+    
+}
+
 optional<Node*> BOps::readBtreeLine(int line, int nPts){
     if(line>0){
     Node* node = DirOps::readBTreeLine(line, nPts); //definir se é leaf ou iternal detro do DirOps
